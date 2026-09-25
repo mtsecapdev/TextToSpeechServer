@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option csharp_namespace = "TextToSpeechServer.Protos";
+
+package TextToSpeechComponents;
+
+// This becomes the base class that will implement the rpc calls
+service TextToSpeechHandler {
+	// This will be the method that client will call and pass in the request, then server will implement what to do with the request.
+	rpc ConvertTextToSpeech (TtsRequest) returns (TtsResponse);
+}
+
+// The client must pass over the text to be speechified, and the voice name
+message TtsRequest {
+	string text = 1;
+    KokoroVoiceName voice_name = 2;
+}
+
+// proto type is bytes, which C# will receive a ByteString. 
+// Need to do conversion in on the client side to whatever format best suits
+message TtsResponse {
+	bytes pcm_data = 1;
+}
+
+// All the voice names from kokoro voices readme
+enum KokoroVoiceName {
+
+    // American Female
+    af_alloy = 0;
+    af_aoede = 1;
+    af_bella = 2;
+    af_heart = 3;
+    af_jessica = 4;
+    af_kore = 5;
+    af_nicole = 6;
+    af_nova = 7;
+    af_river = 8;
+    af_sarah = 9;
+    af_sky = 10;
+
+    // American Male
+    am_adam = 11;
+    am_echo = 12;
+    am_eric = 13;
+    am_fenrir = 14;
+    am_liam = 15;
+    am_michael = 16;
+    am_onyx = 17;
+    am_puck = 18;
+    am_santa = 19;
+
+    // British Female
+    bf_alice = 20;
+    bf_emma = 21;
+    bf_isabella = 22;
+    bf_lily = 23;
+
+    // British Male
+    bm_daniel = 24;
+    bm_fable = 25;
+    bm_george = 26;
+    bm_lewis = 27;
+
+    // Espanyol
+    ef_dora = 28;
+    em_alex = 29;
+    em_santa = 30;
+
+    // French
+    ff_siwis = 31;
+
+    // Hindi
+    hf_alpha = 32;
+    hf_beta = 33;
+    hm_omega = 34;
+    hm_psi = 35;
+
+    // Italian
+    if_sara = 36;
+    im_nicola = 37;
+
+    // Japanese
+    jf_alpha = 38;
+    jf_gongitsune = 39;
+    jf_nezumi = 40;
+    jf_tebukuro = 41;
+    jm_kumo = 42;
+
+    // Brazillian Portugese
+    pf_dora = 43;
+    pm_alex = 44;
+    pm_santa = 45;
+
+    // Mandarin Chinese
+    zf_xiaobei = 46;
+    zf_xiaoni = 47;
+    zf_xiaoxiao = 48;
+    zf_xiaoyi = 49;
+}
+
