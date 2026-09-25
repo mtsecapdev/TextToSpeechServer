@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # onnx models are huge - download from the link in README.
 *.onnx
+
+# kokoro voices can be downloaded from the repo too.
+voices
