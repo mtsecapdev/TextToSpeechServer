@@ -4,18 +4,26 @@ namespace TextToSpeechServer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var version = "v1.0 25092026";
 
-            // Add services to the container.
+            var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddGrpc();
+            builder.Services.AddSingleton<TextToSpeechService>();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            app.MapGrpcService<GreeterService>();
-            app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+            var logger = app.Logger;
+            logger.LogInformation($"{Utils.GetDdMmYyyy()}; {Utils.GetHhMmSs()}; TTS Server {version} started. DO NOT close this window.");
+
+            app.MapGrpcService<TextToSpeechService>();
+            app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client.");
+
+            logger.LogInformation($"{Utils.GetHhMmSs()}; Warming up TTS model..");
+            var ttsService = app.Services.GetRequiredService<TextToSpeechService>();
+            await ttsService.WarmUpAsync();
+            logger.LogInformation($"{Utils.GetHhMmSs()}; Warm up completed");
 
             app.Run();
         }
